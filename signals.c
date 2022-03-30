@@ -8,6 +8,7 @@
 void sig_handler(int signum)
 {
 	int zero=0;
+	
     char *text = ">>>T<<<";
     if (signum == SIGCHLD) {
         printf("1.\tSIGCHLD handled\n");
@@ -67,11 +68,15 @@ void sig_handler(int signum)
 			sleep(1);
 			printf("press CTRL+C!\n");
 		}
+	}else if(signum == SIGINT){
+		printf("   7.\tSIGINT handled\n");
+		printf("program has terminated by ctrl+c, have a nice day(:\n");
+		exit(EXIT_SUCCESS);
+
 	}
 }
 
-int main()
-{
+int main(void){
 	int status;
 	signal (SIGCHLD, sig_handler);
 	signal (SIGSEGV, sig_handler);
@@ -79,10 +84,16 @@ int main()
 	signal (SIGALRM,sig_handler);
 	signal (SIGTERM,sig_handler);
 	signal (SIGUSR1,sig_handler);
+	signal (SIGINT,sig_handler);
+
 
 	if (!(fork())) {
         exit(1);
 	}
 	wait(&status);
 
+	
+	return 0;
 }
+
+
